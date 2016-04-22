@@ -79,8 +79,21 @@ public class SondaTeste {
 	@Test
 	public void deveMoverUmNoEixoY() {
 
-		sonda.mover('M');
+		sonda.mover("M");
 		assertEquals(Bussola.com("0 1 N"), sonda.getPosicaoAtual());
+	
+		sonda.mover("RRM");
+		assertEquals(Bussola.com("0 0 S"), sonda.getPosicaoAtual());
+	}
+	
+	@Test
+	public void deveMoverUmNoEixoX() {
+
+		sonda.mover("RM");
+		assertEquals(Bussola.com("1 0 E"), sonda.getPosicaoAtual());
+	
+		sonda.mover("RRM");
+		assertEquals(Bussola.com("0 0 W"), sonda.getPosicaoAtual());
 	}
 
 	@Test

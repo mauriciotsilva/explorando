@@ -1,15 +1,30 @@
 package br.com.mauriciotsilva.explorer.navegacao;
 
+import static br.com.mauriciotsilva.explorer.navegacao.TipoEixo.HORIZONTAL;
+import static br.com.mauriciotsilva.explorer.navegacao.TipoEixo.VERTICAL;
+
 import java.util.stream.Stream;
 
 public enum Direcao {
 
-	N(0), E(90), S(180), W(270);
+	N(0, VERTICAL, 1), E(90, HORIZONTAL, 1), S(180, VERTICAL, -1), W(270, HORIZONTAL, -1);
 
+	private final int polo;
 	private final int graus;
+	private final TipoEixo tipoEixo;
 
-	private Direcao(int graus) {
+	private Direcao(int graus, TipoEixo tipoEixo, int polo) {
+		this.polo = polo;
 		this.graus = graus;
+		this.tipoEixo = tipoEixo;
+	}
+
+	public TipoEixo getTipoEixo() {
+		return tipoEixo;
+	}
+
+	public int getPolo() {
+		return polo;
 	}
 
 	public Direcao proximo(Lado lado) {

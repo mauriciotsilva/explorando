@@ -36,14 +36,10 @@ public class Bussola implements Cloneable {
 		int x = coordenada.getX();
 		int y = coordenada.getY();
 
-		if (direcao == Direcao.N) {
-			y++;
-		} else if (direcao == Direcao.S) {
-			y--;
-		} else if (direcao == Direcao.E) {
-			x++;
+		if (TipoEixo.HORIZONTAL == direcao.getTipoEixo()) {
+			x += (valor * direcao.getPolo());
 		} else {
-			x--;
+			y += (valor * direcao.getPolo());
 		}
 
 		return new Bussola(direcao, new Coordenada(x, y));
