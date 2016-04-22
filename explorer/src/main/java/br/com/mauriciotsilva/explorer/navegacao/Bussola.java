@@ -59,7 +59,7 @@ public class Bussola implements Cloneable {
 
 	@Override
 	public String toString() {
-		return "Bussola [apontado=" + direcao + ", coordenada=" + coordenada + "]";
+		return String.format("%d %d %s", coordenada.getX(), coordenada.getY(), direcao);
 	}
 
 	@Override
