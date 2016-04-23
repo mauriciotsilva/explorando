@@ -53,7 +53,7 @@ Exemplo Saida para a URL /api/v1/equipamentos/1:
 	"posicaoAtual": "0 0 N",
 	"mapa": {
 		"id": 1,
-		"criadoEm":"2016-01-01T00:00:00.000Z",
+		"criadoEm": "2016-01-01T00:00:00.000Z",
 		"x": 5,
 		"y": 5
 	}
@@ -66,7 +66,36 @@ Exemplo payload:
 
 ```
 {
-	"comando": "LLLRMM"
+	"comando": "MMRMR"
 }
 ```
+
+### Consulta apos a execucao do Comando
+
+Consulta ao equipamento logo apos executar o comando no passo anterior
+
+
+/api/v1/equipamentos/1 GET
+
+```
+{
+	"id": 1,
+	"posicaoAtual": "1 2 S",
+	"mapa": {
+		"id": 1,
+		"criadoEm": "2016-01-01T00:00:00.000Z",
+		"x": 5,
+		"y": 5
+	},
+	ultimosComandos: [
+		{"data": "2016-01-01T00:00:00.000Z", "comando": "MMRMR"}
+	]
+}
+
+```
+
+
+
+
+
 
