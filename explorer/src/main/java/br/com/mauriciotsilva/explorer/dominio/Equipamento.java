@@ -1,33 +1,78 @@
 package br.com.mauriciotsilva.explorer.dominio;
 
+import static java.util.stream.Collectors.toList;
+import static javax.persistence.GenerationType.IDENTITY;
+import static javax.xml.bind.annotation.XmlAccessType.FIELD;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import javax.persistence.CollectionTable;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlAccessorType;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.mauriciotsilva.explorer.Sonda;
 import br.com.mauriciotsilva.explorer.navegacao.Bussola;
 
+@Entity
+@XmlAccessorType(FIELD)
+@Table(name = "tb_equipamento")
+@NamedEntityGraph(name = "graph.Equipamento.ultimosComandos", attributeNodes = @NamedAttributeNode("ultimosComandos") )
 public class Equipamento {
 
+	public static final int QUANTIDADE_MAXIMA_COMANDO = 5;
+
+	@Id
+	@GeneratedValue(strategy = IDENTITY)
 	private Long id;
+
+	@ManyToOne
 	private Mapa mapa;
+
 	private String posicaoAtual;
-	private List<ComandoEquipamento> comandos;
+
+	@Transient
+	private Optional<Sonda> sonda;
+
+	@ElementCollection
+	@CollectionTable(name = "tb_comandos")
+	private List<ComandoEquipamento> ultimosComandos;
 
 	protected Equipamento() {
-		comandos = new ArrayList<>();
+		this.sonda = Optional.empty();
+		ultimosComandos = new ArrayList<>();
 	}
 
 	public Equipamento(Mapa mapa, String posicaoAtual) {
 		this();
 		this.mapa = mapa;
 		this.posicaoAtual = posicaoAtual;
+
+		this.sonda = Optional.of(criarSonda());
+
 	}
 
 	public ComandoEquipamento comandar(String comando) {
 		atualizarPosicao(comando);
+		return registrarComando(comando);
+	}
+
+	private ComandoEquipamento registrarComando(String comando) {
 		ComandoEquipamento comandoEquipamento = new ComandoEquipamento(comando);
 
-		comandos.add(comandoEquipamento);
+		ultimosComandos.add(comandoEquipamento);
+		ultimosComandos = ultimosComandos.stream().sorted().limit(QUANTIDADE_MAXIMA_COMANDO).collect(toList());
 
 		return comandoEquipamento;
 	}
@@ -39,11 +84,16 @@ public class Equipamento {
 		posicaoAtual = sonda.getPosicaoAtual().toString();
 	}
 
+	@JsonIgnore
 	public Sonda getSonda() {
+		return sonda.orElse(criarSonda());
+	}
+
+	private Sonda criarSonda() {
 		return new Sonda(mapa.getPlanalto(), Bussola.com(posicaoAtual));
 	}
 
-	protected Long getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -51,7 +101,7 @@ public class Equipamento {
 		this.id = id;
 	}
 
-	protected String getPosicaoAtual() {
+	public String getPosicaoAtual() {
 		return posicaoAtual;
 	}
 
@@ -59,12 +109,20 @@ public class Equipamento {
 		this.posicaoAtual = posicaoAtual;
 	}
 
-	protected List<ComandoEquipamento> getComandos() {
-		return comandos;
+	public List<ComandoEquipamento> getUltimosComandos() {
+		return ultimosComandos;
 	}
 
-	protected void setComandos(List<ComandoEquipamento> comandos) {
-		this.comandos = comandos;
+	protected void setUltimosComandos(List<ComandoEquipamento> ultimosComandos) {
+		this.ultimosComandos = ultimosComandos;
+	}
+
+	public Mapa getMapa() {
+		return mapa;
+	}
+
+	protected void setMapa(Mapa mapa) {
+		this.mapa = mapa;
 	}
 
 	@Override

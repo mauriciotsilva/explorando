@@ -1,46 +1,66 @@
 package br.com.mauriciotsilva.explorer.dominio;
 
-import static javax.persistence.GenerationType.AUTO;
+import static javax.persistence.GenerationType.IDENTITY;
 import static javax.xml.bind.annotation.XmlAccessType.FIELD;
 
 import java.time.Instant;
+import java.util.Optional;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAccessorType;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.mauriciotsilva.explorer.Planalto;
 
 @Entity
-@Table(name = "mapa")
 @XmlAccessorType(FIELD)
+@Table(name = "tb_mapa")
 public class Mapa {
 
 	@Id
-	@GeneratedValue(strategy = AUTO)
+	@GeneratedValue(strategy = IDENTITY)
 	private Long id;
 
-	private Instant dataCricao;
+	private String nome;
+	private Instant criadoEm;
+
+	@NotNull
 	private Integer x;
+
+	@NotNull
 	private Integer y;
 
+	@Transient
+	private Optional<Planalto> planalto;
+
 	protected Mapa() {
-		dataCricao = Instant.now();
+		criadoEm = Instant.now();
+		planalto = Optional.empty();
 	}
 
 	public Mapa(Integer x, Integer y) {
 		this();
 		this.x = x;
 		this.y = y;
+		this.planalto = Optional.of(criarPlanalto());
 	}
 
+	@JsonIgnore
 	public Planalto getPlanalto() {
+		return planalto.orElse(criarPlanalto());
+	}
+
+	private Planalto criarPlanalto() {
 		return Planalto.com(x, y);
 	}
 
-	protected Long getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -64,8 +84,20 @@ public class Mapa {
 		this.y = y;
 	}
 
-	public Instant getDataCricao() {
-		return dataCricao;
+	public Instant getCriadoEm() {
+		return criadoEm;
+	}
+
+	protected void setCriadoEm(Instant criadoEm) {
+		this.criadoEm = criadoEm;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	@Override

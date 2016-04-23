@@ -2,7 +2,10 @@ package br.com.mauriciotsilva.explorer.dominio;
 
 import java.time.Instant;
 
-public class ComandoEquipamento {
+import javax.persistence.Embeddable;
+
+@Embeddable
+public class ComandoEquipamento implements Comparable<ComandoEquipamento> {
 
 	private Instant data;
 	private String comando;
@@ -22,5 +25,10 @@ public class ComandoEquipamento {
 
 	public Instant getData() {
 		return data;
+	}
+	
+	@Override
+	public int compareTo(ComandoEquipamento outroComando) {
+		return outroComando.data.compareTo(data);
 	}
 }
