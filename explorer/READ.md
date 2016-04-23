@@ -4,7 +4,7 @@
 
 Permite criar e consultar mapas Cadastrados
 
-### Criar um Mapa (URL: /api/v1/atlas POST)
+### Criar um Mapa (/api/v1/atlas POST)
 
 Exemplo payload:
 
@@ -15,7 +15,7 @@ Exemplo payload:
 }
 ```
 
-### Consultando um Mapa (URL: /api/v1/atlas/{id} GET)
+### Consultando um Mapa (/api/v1/atlas/{id} GET)
 
 Exemplo Saida para a url /api/v1/atlas/1:
 
@@ -32,7 +32,9 @@ Exemplo Saida para a url /api/v1/atlas/1:
 
 Permite criar, executar comandos remotos e consultar um equipamento enviado a Marte
 
-### Enviar equipamento (URL: /api/v1/equipamentos POST)
+### Enviar equipamento (/api/v1/equipamentos POST)
+
+Exemplo payload:
 
 ```
 {
@@ -41,6 +43,21 @@ Permite criar, executar comandos remotos e consultar um equipamento enviado a Ma
 }
 ```
 
-## Comandar Equipamento
+### Consultar Equipamento (/api/v1/equipamentos/{id} GET)
 
-### Comando Remoto
+Exemplo Saida para a url /api/v1/equipamentos/1:
+
+```
+{
+	"id": 1,
+	"posicaoAtual": "0 0 N",
+	"mapa": {
+		"id": 1,
+		"criadoEm":"2016-01-01T00:00:00.000Z",
+		"x": 5,
+		"y": 5
+	}
+}
+```
+
+### Comandar Equipamento
