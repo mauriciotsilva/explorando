@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import br.com.mauriciotsilva.explorer.Planalto;
 import br.com.mauriciotsilva.explorer.navegacao.Coordenada;
 
 public class PlanatoTeste {

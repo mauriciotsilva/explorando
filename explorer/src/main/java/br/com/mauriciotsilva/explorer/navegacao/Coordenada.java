@@ -2,6 +2,7 @@ package br.com.mauriciotsilva.explorer.navegacao;
 
 public class Coordenada {
 
+
 	private final int x;
 	private final int y;
 
@@ -51,5 +52,4 @@ public class Coordenada {
 			return false;
 		return true;
 	}
-
 }

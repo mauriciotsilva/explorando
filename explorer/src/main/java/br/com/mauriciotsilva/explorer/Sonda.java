@@ -3,6 +3,7 @@ package br.com.mauriciotsilva.explorer;
 import static java.util.Objects.requireNonNull;
 
 import br.com.mauriciotsilva.explorer.navegacao.Bussola;
+import br.com.mauriciotsilva.explorer.navegacao.Coordenada;
 import br.com.mauriciotsilva.explorer.navegacao.Lado;
 
 public class Sonda {
@@ -14,6 +15,10 @@ public class Sonda {
 	public Sonda(Planalto planalto, Bussola posicaoInicial) {
 		this.planalto = requireNonNull(planalto, "Planalto nao pode ser nulo");
 		this.bussola = requireNonNull(posicaoInicial, "Posicao Inicial nao deve ser nulo").clone();
+	}
+	
+	public Coordenada getCoordernada(){
+		return getPosicaoAtual().getCoordenada();
 	}
 
 	public void mover(String comandos) {

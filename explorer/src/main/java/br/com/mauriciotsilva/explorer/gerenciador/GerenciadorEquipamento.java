@@ -9,6 +9,7 @@ import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.validation.Valid;
 
+import br.com.mauriciotsilva.explorer.AcaoNaoExecutadaException;
 import br.com.mauriciotsilva.explorer.dominio.ComandoEquipamento;
 import br.com.mauriciotsilva.explorer.dominio.Equipamento;
 import br.com.mauriciotsilva.explorer.dominio.Mapa;
@@ -26,7 +27,9 @@ public class GerenciadorEquipamento {
 	public Equipamento enviar(@Valid CadastroEquipamento cadastroEquipamento) {
 
 		try {
+
 			Mapa mapa = mapaService.trazer(cadastroEquipamento.getMapa());
+
 			Equipamento equipamento = new Equipamento(mapa, cadastroEquipamento.getPosicao());
 			entityManager.persist(equipamento);
 
@@ -37,7 +40,11 @@ public class GerenciadorEquipamento {
 	}
 
 	public ComandoEquipamento comandar(Long id, String comando) {
-		return conectar(id).comandar(comando);
+		try {
+			return conectar(id).comandar(comando);
+		} catch (IllegalArgumentException e) {
+			throw new AcaoNaoExecutadaException("Nao foi possivel executar comando", e);
+		}
 	}
 
 	public Equipamento conectar(Long id) {

@@ -21,7 +21,7 @@ public class Bussola implements Cloneable {
 	private static String[] extrairValores(String parametros) {
 		String[] valores = requireNonNull(parametros, "Parametros nao deve ser nulo").split("\\s");
 		if (valores.length != 3) {
-			throw new IllegalArgumentException();
+			throw new PosicionamentoInvalidoException("Nao foi possivel se posicionar com " + parametros);
 		}
 
 		return valores;
@@ -47,6 +47,10 @@ public class Bussola implements Cloneable {
 
 	public void girar(Lado lado) {
 		direcao = direcao.proximo(lado);
+	}
+
+	public boolean estaEm(Coordenada coordenada) {
+		return this.coordenada.equals(coordenada);
 	}
 
 	public Direcao getApontado() {

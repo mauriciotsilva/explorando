@@ -6,7 +6,7 @@ public class ExplorerException extends RuntimeException {
 
 	private final int codigo;
 
-	public ExplorerException(int codigo, String mensagem, Throwable causa) {
+	protected ExplorerException(int codigo, String mensagem, Throwable causa) {
 		super(mensagem, causa);
 		this.codigo = codigo;
 	}

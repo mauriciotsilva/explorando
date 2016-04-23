@@ -6,7 +6,6 @@ import static javax.xml.bind.annotation.XmlAccessType.FIELD;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
@@ -19,8 +18,6 @@ import javax.persistence.NamedEntityGraph;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlAccessorType;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.mauriciotsilva.explorer.Sonda;
 import br.com.mauriciotsilva.explorer.navegacao.Bussola;
@@ -43,14 +40,13 @@ public class Equipamento {
 	private String posicaoAtual;
 
 	@Transient
-	private Optional<Sonda> sonda;
+	private Sonda sonda;
 
 	@ElementCollection
 	@CollectionTable(name = "tb_comandos")
 	private List<ComandoEquipamento> ultimosComandos;
 
 	protected Equipamento() {
-		this.sonda = Optional.empty();
 		ultimosComandos = new ArrayList<>();
 	}
 
@@ -59,7 +55,8 @@ public class Equipamento {
 		this.mapa = mapa;
 		this.posicaoAtual = posicaoAtual;
 
-		this.sonda = Optional.of(criarSonda());
+		Sonda sonda = criarSonda();
+		validarPosicao(sonda);
 
 	}
 
@@ -78,15 +75,17 @@ public class Equipamento {
 	}
 
 	private void atualizarPosicao(String comando) {
-		Sonda sonda = getSonda();
+		Sonda sonda = criarSonda();
 		sonda.mover(comando);
 
+		validarPosicao(sonda);
 		posicaoAtual = sonda.getPosicaoAtual().toString();
 	}
 
-	@JsonIgnore
-	public Sonda getSonda() {
-		return sonda.orElse(criarSonda());
+	private void validarPosicao(Sonda sonda) {
+		if (mapa.existeEquipamento(sonda.getCoordernada())) {
+			throw new RiscoColisaoException(sonda.getCoordernada());
+		}
 	}
 
 	private Sonda criarSonda() {

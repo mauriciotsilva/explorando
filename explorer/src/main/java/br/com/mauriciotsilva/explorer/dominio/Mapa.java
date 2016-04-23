@@ -4,11 +4,13 @@ import static javax.persistence.GenerationType.IDENTITY;
 import static javax.xml.bind.annotation.XmlAccessType.FIELD;
 
 import java.time.Instant;
+import java.util.Collection;
 import java.util.Optional;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -17,6 +19,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.mauriciotsilva.explorer.Planalto;
+import br.com.mauriciotsilva.explorer.navegacao.Bussola;
+import br.com.mauriciotsilva.explorer.navegacao.Coordenada;
 
 @Entity
 @XmlAccessorType(FIELD)
@@ -39,6 +43,9 @@ public class Mapa {
 	@Transient
 	private Optional<Planalto> planalto;
 
+	@OneToMany(mappedBy = "mapa")
+	private Collection<Equipamento> equipamentos;
+
 	protected Mapa() {
 		criadoEm = Instant.now();
 		planalto = Optional.empty();
@@ -49,6 +56,11 @@ public class Mapa {
 		this.x = x;
 		this.y = y;
 		this.planalto = Optional.of(criarPlanalto());
+	}
+
+	public boolean existeEquipamento(Coordenada coordenada) {
+		return equipamentos.stream().map(e -> Bussola.com(e.getPosicaoAtual()))
+				.anyMatch(bussola -> bussola.estaEm(coordenada));
 	}
 
 	@JsonIgnore
@@ -98,6 +110,14 @@ public class Mapa {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	protected Collection<Equipamento> getEquipamentos() {
+		return equipamentos;
+	}
+
+	protected void setEquipamentos(Collection<Equipamento> equipamentos) {
+		this.equipamentos = equipamentos;
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.validation.Valid;
 
+import br.com.mauriciotsilva.explorer.AcaoNaoExecutadaException;
 import br.com.mauriciotsilva.explorer.dominio.Mapa;
 
 @Gerente
