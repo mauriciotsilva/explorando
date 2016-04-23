@@ -1,3 +1,30 @@
+# Explorando API
+
+## Atlas
+
+Permite criar e consultar mapas Cadastrados
+
+### Criar um Mapa
+
+URL: /api/v1/atlas POST
+
+```
+{
+"x": 5,
+"y": 5
+}
+```
+
+### Consultando um Mapa
+
+## Equipamento
+
+### Enviar equipamento
+
+## Comandar Equipamento
+
+### Comando Remoto
+
 # Teste de Programação Elo7
 
 Como parte do processo seletivo do Elo7, gostaríamos que você fizesse uma 
